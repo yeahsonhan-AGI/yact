@@ -102,7 +102,7 @@ export function GroupsPageClient({
         )}
       </div>
 
-      <Tabs value={activeTab} onValueChange={(value) => {
+      <Tabs value={activeTab} defaultValue="discover" onValueChange={(value) => {
         setActiveTab(value)
         const params = new URLSearchParams(searchParams)
         params.set('tab', value)
