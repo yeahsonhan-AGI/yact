@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { DatePicker } from '@/components/ui/date-picker'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { toast } from 'sonner'
 import type { GroupInput } from '@/types'
@@ -183,7 +184,11 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} lang="en" />
+                      <DatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="Select start date"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,7 +202,11 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
                   <FormItem>
                     <FormLabel>End Date (Optional)</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} lang="en" />
+                      <DatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="Select end date"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
