@@ -183,7 +183,7 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input type="date" {...field} lang="en" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,7 +197,7 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
                   <FormItem>
                     <FormLabel>End Date (Optional)</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input type="date" {...field} lang="en" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
