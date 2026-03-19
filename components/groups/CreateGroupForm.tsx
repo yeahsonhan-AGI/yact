@@ -211,18 +211,37 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Join Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select join type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="open">Open - Anyone can join directly</SelectItem>
-                      <SelectItem value="request">Request - Requires leader approval</SelectItem>
-                      <SelectItem value="invite_only">Invite Only - Can only join via invitation</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <div className="space-y-3">
+                      {[
+                        { value: 'open', label: 'Open', desc: 'Anyone can join directly' },
+                        { value: 'request', label: 'Request', desc: 'Requires leader approval' },
+                        { value: 'invite_only', label: 'Invite Only', desc: 'Can only join via invitation' },
+                      ].map((option) => (
+                        <div
+                          key={option.value}
+                          className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                            field.value === option.value
+                              ? 'border-[#2D4A3E] bg-[#2D4A3E]/5'
+                              : 'border-border hover:border-[#2D4A3E]/50'
+                          }`}
+                          onClick={() => field.onChange(option.value)}
+                        >
+                          <div className={`flex items-center justify-center w-5 h-5 mt-0.5 rounded-full border-2 ${
+                            field.value === option.value ? 'border-[#2D4A3E]' : 'border-muted-foreground'
+                          }`}>
+                            {field.value === option.value && (
+                              <div className="w-2.5 h-2.5 rounded-full bg-[#2D4A3E]" />
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium">{option.label}</div>
+                            <div className="text-sm text-muted-foreground">{option.desc}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
