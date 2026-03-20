@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from '@/hooks/use-toast'
 import { createFollowNotification } from '@/lib/notifications'
+import { playNotificationSound } from '@/lib/sounds'
 
 interface SearchResult {
   id: string
@@ -96,6 +97,7 @@ export default function SearchPage() {
           title: 'Following',
           description: `You are now following @${profile.username}`,
         })
+        playNotificationSound('success')
         await createFollowNotification(profile.id, currentUserId)
       } else {
         await supabase
@@ -109,6 +111,7 @@ export default function SearchPage() {
           title: 'Unfollowed',
           description: `You unfollowed @${profile.username}`,
         })
+        playNotificationSound('info')
       }
     } catch (error) {
       // Revert on error
@@ -122,6 +125,7 @@ export default function SearchPage() {
         description: 'Failed to update follow status',
         variant: 'destructive',
       })
+      playNotificationSound('error')
     }
   }
 

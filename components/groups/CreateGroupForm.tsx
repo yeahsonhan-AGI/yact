@@ -15,6 +15,7 @@ import { DatePicker } from '@/components/ui/date-picker'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { toast } from 'sonner'
 import type { GroupInput } from '@/types'
+import { playNotificationSound } from '@/lib/sounds'
 
 const createGroupSchema = z.object({
   name: z.string().min(1, 'Group name is required').max(200, 'Group name must be at most 200 characters'),
@@ -83,10 +84,12 @@ export function CreateGroupForm({ tripId, onSuccess }: CreateGroupFormProps) {
 
       const data = await response.json()
       toast.success('Group created successfully!')
+      playNotificationSound('success')
       onSuccess?.()
       router.push(`/groups/${data.group.id}`)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to create group')
+      playNotificationSound('error')
     } finally {
       setIsSubmitting(false)
     }
