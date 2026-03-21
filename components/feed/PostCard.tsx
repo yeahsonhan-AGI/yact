@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Trash2 } from 'lucide-react'
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Trash2, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
@@ -15,6 +15,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { formatDistanceToNow } from 'date-fns'
 import { cn } from '@/lib/utils'
 import type { Post, Comment } from '@/types'
@@ -33,6 +41,7 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
   const [likesCount, setLikesCount] = useState(post.likes_count || 0)
   const [saved, setSaved] = useState(false)
   const [showComments, setShowComments] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(false)
@@ -72,30 +81,29 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
   }
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this post?')) {
-      try {
-        const { error } = await supabase
-          .from('posts')
-          .delete()
-          .eq('id', post.id)
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', post.id)
 
-        if (error) throw error
+      if (error) throw error
 
-        toast({
-          title: 'Post deleted',
-          description: 'Your post has been deleted successfully',
-        })
+      toast({
+        title: 'Post deleted',
+        description: 'Your post has been deleted successfully',
+      })
 
-        // Refresh the page to remove the deleted post
-        window.location.reload()
-      } catch (error) {
-        console.error('Error deleting post:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to delete post',
-          variant: 'destructive',
-        })
-      }
+      setShowDeleteDialog(false)
+      // Refresh the page to remove the deleted post
+      window.location.reload()
+    } catch (error) {
+      console.error('Error deleting post:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to delete post',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -236,7 +244,7 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
                 <DropdownMenuItem onClick={() => window.location.href = `/edit/${post.id}`}>
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDelete} className="text-red-600">
+                <DropdownMenuItem onClick={() => setShowDeleteDialog(true)} className="text-red-600">
                   Delete
                 </DropdownMenuItem>
               </>
@@ -321,6 +329,7 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
 
         {(post.comments_count || comments.length) > 0 && (
           <button
+            type="button"
             onClick={loadComments}
             className="text-sm text-muted-foreground hover:underline"
           >
@@ -340,7 +349,7 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
                 {comments.map((comment) => (
                   <div key={comment.id} className="flex items-start space-x-2 text-sm">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={comment.profiles?.avatar_url || undefined} />
+                      <AvatarImage src={comment.profiles?.avatar_url || undefined} alt={comment.profiles?.username || 'User'} />
                       <AvatarFallback className="text-xs">
                         {comment.profiles?.username?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
@@ -383,6 +392,30 @@ export function PostCard({ post, currentUserId, priority = false }: PostCardProp
           </div>
         )}
       </CardFooter>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Post?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete your post.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center gap-3 py-4 text-sm text-muted-foreground">
+            <AlertTriangle className="h-5 w-5 text-destructive" />
+            <span>Are you sure you want to delete this post?</span>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }

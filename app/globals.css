@@ -179,4 +179,18 @@
   .safe-area-inset-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+  .overscroll-contain {
+    overscroll-behavior: contain;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-reduce\:transition-none {
+      transition: none !important;
+    }
+    .motion-reduce\:data-open\:animate-none {
+      animation: none !important;
+    }
+    .motion-reduce\:data-closed\:animate-none {
+      animation: none !important;
+    }
+  }
 }

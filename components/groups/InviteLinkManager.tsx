@@ -190,7 +190,7 @@ export function InviteLinkManager({ groupId, onClose }: InviteLinkManagerProps) 
         {/* Invites List */}
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground">
-            Loading...
+            Loading…
           </div>
         ) : invites.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">

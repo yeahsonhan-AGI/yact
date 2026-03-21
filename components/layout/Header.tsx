@@ -126,30 +126,38 @@ export function Header({ user, title }: HeaderProps) {
         {/* Right - Action Icons */}
         <div className="flex items-center space-x-1">
           {/* Search */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-full"
-            onClick={() => router.push('/search')}
-          >
-            <SearchIcon className="h-5 w-5" strokeWidth={2} />
-            <span className="sr-only">Search</span>
-          </Button>
-
-          {/* Notifications */}
-          <div className="relative">
+          <Link href="/search">
             <Button
               variant="ghost"
               size="icon"
-              className={cn(
-                'h-9 w-9 rounded-full',
-                pathname === '/notifications' && 'bg-accent text-accent-foreground'
-              )}
-              onClick={() => router.push('/notifications')}
+              className="h-9 w-9 rounded-full"
+              asChild
             >
-              <Heart className="h-5 w-5" strokeWidth={2} />
-              <span className="sr-only">Notifications</span>
+              <span>
+                <SearchIcon className="h-5 w-5" strokeWidth={2} />
+                <span className="sr-only">Search</span>
+              </span>
             </Button>
+          </Link>
+
+          {/* Notifications */}
+          <div className="relative">
+            <Link href="/notifications">
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  'h-9 w-9 rounded-full',
+                  pathname === '/notifications' && 'bg-accent text-accent-foreground'
+                )}
+                asChild
+              >
+                <span>
+                  <Heart className="h-5 w-5" strokeWidth={2} />
+                  <span className="sr-only">Notifications</span>
+                </span>
+              </Button>
+            </Link>
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-white">
                 {unreadCount > 99 ? '99+' : unreadCount}
@@ -158,15 +166,19 @@ export function Header({ user, title }: HeaderProps) {
           </div>
 
           {/* Create */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-full"
-            onClick={() => router.push('/create')}
-          >
-            <Plus className="h-5 w-5" strokeWidth={2} />
-            <span className="sr-only">Create</span>
-          </Button>
+          <Link href="/create">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-full"
+              asChild
+            >
+              <span>
+                <Plus className="h-5 w-5" strokeWidth={2} />
+                <span className="sr-only">Create</span>
+              </span>
+            </Button>
+          </Link>
 
           {/* User Menu - Sheet */}
           {user ? (
@@ -203,36 +215,35 @@ export function Header({ user, title }: HeaderProps) {
 
                 {/* Menu items */}
                 <div className="py-2 space-y-1">
-                  <button
-                    onClick={() => {
-                      const username = user.username
-                      setUserMenuOpen(false)
-                      if (username) {
-                        router.push(`/${username}`)
-                      } else {
+                  <Link
+                    href={user.username ? `/${user.username}` : '#'}
+                    onClick={(e) => {
+                      if (!user.username) {
+                        e.preventDefault()
+                        setUserMenuOpen(false)
                         toast({
                           title: 'Profile not found',
                           description: 'Please complete your profile first',
                           variant: 'destructive',
                         })
+                      } else {
+                        setUserMenuOpen(false)
                       }
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left hover:bg-accent rounded-lg transition-colors"
                   >
                     <UserIcon className="h-5 w-5 text-muted-foreground" />
                     <span className="font-medium">Profile</span>
-                  </button>
+                  </Link>
 
-                  <button
-                    onClick={() => {
-                      setUserMenuOpen(false)
-                      router.push('/settings')
-                    }}
+                  <Link
+                    href="/settings"
+                    onClick={() => setUserMenuOpen(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left hover:bg-accent rounded-lg transition-colors"
                   >
                     <Settings className="h-5 w-5 text-muted-foreground" />
                     <span className="font-medium">Settings</span>
-                  </button>
+                  </Link>
 
                   <div className="border-t my-2 mx-4" />
 

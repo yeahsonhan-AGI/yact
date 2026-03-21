@@ -452,7 +452,7 @@ export function EditTripClient({ trip, userId }: EditTripClientProps) {
           </Button>
           <Button onClick={handleSaveTrip} disabled={savingTrip}>
             <Save className="h-4 w-4 mr-2" />
-            {savingTrip ? 'Saving...' : 'Save Changes'}
+            {savingTrip ? 'Saving…' : 'Save Changes'}
           </Button>
         </div>
       </div>

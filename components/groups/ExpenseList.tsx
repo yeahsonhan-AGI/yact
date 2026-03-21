@@ -336,7 +336,7 @@ export function ExpenseList({ groupId, currentUserId, isLeader }: ExpenseListPro
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="text-center py-8 text-muted-foreground">Loading...</div>
+          <div className="text-center py-8 text-muted-foreground">Loading…</div>
         ) : expenses.length === 0 ? (
           <div className="text-center py-8">
             <Wallet className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />

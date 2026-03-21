@@ -210,7 +210,7 @@ export function ItineraryDayForm({ day, dayNumber, itineraryId, onSave, onCancel
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Saving...' : day ? 'Update' : 'Add'}
+              {isLoading ? 'Saving…' : day ? 'Update' : 'Add'}
             </Button>
           </DialogFooter>
         </form>

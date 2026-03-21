@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -18,6 +19,7 @@ interface CreatePostFormProps {
 }
 
 export function CreatePostForm({ file, setFile, preview, setPreview, onClose }: CreatePostFormProps) {
+  const router = useRouter()
   const supabase = createClient()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [caption, setCaption] = useState('')
@@ -135,7 +137,8 @@ export function CreatePostForm({ file, setFile, preview, setPreview, onClose }: 
       })
 
       onClose()
-      window.location.reload()
+      router.refresh()
+      router.push('/')
     } catch (error) {
       console.error('Error creating post:', error)
       toast({
@@ -228,7 +231,7 @@ export function CreatePostForm({ file, setFile, preview, setPreview, onClose }: 
             {uploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Posting...
+                Posting…
               </>
             ) : (
               'Share Post'
